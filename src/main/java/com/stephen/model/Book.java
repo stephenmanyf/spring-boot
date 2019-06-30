@@ -1,3 +1,6 @@
+/**
+ * Reference: https://www.mkyong.com/spring-boot/spring-rest-hello-world-example/
+ */
 package com.stephen.model;
 
 import java.math.BigDecimal;
@@ -21,6 +24,11 @@ public class Book {
 		this.author = author;
 		this.price = price;
 	}
+	
+	public Book() {
+		
+	}
+	
 	public Long getId() {
 		return id;
 	}
