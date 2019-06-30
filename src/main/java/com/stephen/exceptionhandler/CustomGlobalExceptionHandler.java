@@ -8,12 +8,14 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.stephen.exception.BookNotFoundException;
 import com.stephen.exception.BookUnSupportedFieldPatchException;
 
+@ControllerAdvice
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
     // Let Spring handle the exception, we just override the status code
     @ExceptionHandler(BookNotFoundException.class)
