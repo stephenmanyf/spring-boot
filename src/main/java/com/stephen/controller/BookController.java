@@ -1,13 +1,18 @@
 /**
  * Reference: https://www.mkyong.com/spring-boot/spring-rest-hello-world-example/
+ * Reference: https://www.mkyong.com/spring-boot/spring-rest-validation-example/
  */
 package com.stephen.controller;
 
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -25,6 +30,7 @@ import com.stephen.exception.BookNotFoundException;
 import com.stephen.exception.BookUnSupportedFieldPatchException;
 
 @RestController
+@Validated //class level
 public class BookController {
 
     @Autowired
@@ -40,13 +46,13 @@ public class BookController {
     //return 201 instead of 200
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/books")
-    Book newBook(@RequestBody Book newBook) {
+    Book newBook(@Valid @RequestBody Book newBook) {
         return repository.save(newBook);
     }
 
     // Find
     @GetMapping("/books/{id}")
-    Book findOne(@PathVariable Long id) {
+    Book findOne(@PathVariable @Min(1) Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
     }
