@@ -90,7 +90,7 @@ public class BookControllerTest {
 					.andExpect(jsonPath("$.status", is(400)))
 					.andExpect(jsonPath("$.errors").isArray())
 					.andExpect(jsonPath("$.errors", hasSize(1)))
-					.andExpect(jsonPath("$.errors", hasItem("Author is not allowed")));
+					.andExpect(jsonPath("$.errors", hasItem("Author is not allowed.")));
 		
 		verify(mockRepository, times(0)).save(any(Book.class));
 			

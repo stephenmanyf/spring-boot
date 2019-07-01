@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,10 @@ import com.stephen.exception.BookUnSupportedFieldPatchException;
 
 @ControllerAdvice
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
+	
+	@Autowired
+	private MessageSource messages;
+	
     // Let Spring handle the exception, we just override the status code
 //    @ExceptionHandler(BookNotFoundException.class)
 //    public void springHandleNotFound(HttpServletResponse response) throws IOException {
@@ -42,11 +48,21 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     	Map<String, Object> body = new LinkedHashMap<>();
     	body.put("timestamp", new Date());
     	body.put("status", HttpStatus.NOT_FOUND.value());
-//    	body.put("message", ex.getMessage());
     	body.put("errors", Arrays.asList(ex.getMessage()));
 
     	return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
+	//Reference: https://www.bealdung.com/spring-security-registration-verification-email
+//    @ExceptionHandler(BookNotFoundException.class)
+//    public ResponseEntity<Object> springHandleNotFound(RuntimeException ex, WebRequest request) throws IOException {
+//    	logger.info("404 Status Code", ex);
+//    	Map<String, Object> body = new LinkedHashMap<>();
+//    	body.put("timestamp", new Date());
+//    	body.put("status", HttpStatus.NOT_FOUND.value());
+//    	body.put("errors", Arrays.asList(ex.getMessage()));
+//
+//    	return handleExceptionInternal(ex, body, new HttpHeaders(), HttpStatus.NOT_FOUND, request); //this would cause exception logged in console
+//    }
 
     @ExceptionHandler(BookUnSupportedFieldPatchException.class)
     public void springUnSupportedFieldPatch(HttpServletResponse response) throws IOException {
@@ -73,6 +89,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     	return new ResponseEntity<>(body, headers, status);
     }
     
+    //Reference: https://www.bealdung.com/spring-security-registration-verification-email
     @ExceptionHandler(ConstraintViolationException.class)
 //    public void constrainViolationException(HttpServletResponse response) throws IOException {
 //    	response.sendError(HttpStatus.BAD_REQUEST.value());
@@ -81,7 +98,6 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     	Map<String, Object> body = new LinkedHashMap<>();
     	body.put("timestamp", new Date());
     	body.put("status", HttpStatus.BAD_REQUEST.value());
-//    	body.put("message", ex.getMessage());
     	body.put("errors", Arrays.asList(ex.getMessage()));
 
     	return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);

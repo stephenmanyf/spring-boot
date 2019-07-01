@@ -25,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stephen.model.Book;
 import com.stephen.repository.BookRepository;
@@ -60,7 +61,7 @@ public class BookControllerRestTemplateTest {
 		
 		// send json with POST
 		ResponseEntity<String> response = restTemplate.postForEntity("/books", entity, String.class);
-		// printJSON(response);
+		 printJSON(response);
 		
 		String expectedJson = "{\"status\":400,\"errors\":[\"Author is not allowed.\",\"Please provide a price\",\"Please provide an author\"]}";
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -94,13 +95,13 @@ public class BookControllerRestTemplateTest {
 		verify(mockRepository, times(0)).save(any(Book.class));
 	}
 	
-//	private static void printJSON(Object object) {
-//		String result;
-//		try {
-//			result = om.writerWithDefaultPrettyPrinter().writeValueAsString(object);
-//			System.out.println(result);
-//		} catch (JsonProcessingException e) {
-//			e.printStackTrace();
-//		}
-//	}
+	private static void printJSON(Object object) {
+		String result;
+		try {
+			result = om.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+			System.out.println(result);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+	}
 }

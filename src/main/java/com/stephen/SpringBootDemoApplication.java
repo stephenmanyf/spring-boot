@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 
 import com.stephen.repository.BookRepository;
 import com.stephen.model.Book;
@@ -22,6 +23,7 @@ public class SpringBootDemoApplication {
 		SpringApplication.run(SpringBootDemoApplication.class, args);
 	}
 
+	@Profile("demo")
 	// init bean to insert 3 books into h2 database.
     @Bean
     CommandLineRunner initDatabase(BookRepository repository) {
