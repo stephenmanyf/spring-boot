@@ -7,6 +7,7 @@ package com.stephen;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
@@ -16,7 +17,8 @@ import com.stephen.model.Book;
 
 import java.math.BigDecimal;
 
-@SpringBootApplication
+//@SpringBootApplication
+@SpringBootApplication(exclude = { SecurityAutoConfiguration.class }) //Disabling the security auto-configuration
 public class SpringBootDemoApplication {
 
 	public static void main(String[] args) {

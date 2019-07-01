@@ -11,7 +11,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>spring-boot-demo</name>
 	<description>Demo project for Spring Boot</description>
-
+ 
     <parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -89,11 +89,17 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+        
+        <dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-servlet-api</artifactId>
+			<version>9.0.14</version>
+			<!-- <scope>provided</scope> -->
+		</dependency>
     </dependencies>
 
     <build>
         <plugins>
-
 <!--             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -110,8 +116,9 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.0</version>
             </plugin>
-
+			<groupId>org.apache.tomcat.maven</groupId>
+			<artifactId>tomcat7-maven-plugin</artifactId>
+			<version>2.2</version>
         </plugins>
-
     </build>
 </project>

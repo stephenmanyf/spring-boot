@@ -1,7 +1,9 @@
 /**
  * Reference: https://www.mkyong.com/spring-boot/spring-rest-hello-world-example/
- * Reference: https://www.mkyong.com/spring-boot/spring-rest-validation-example/
+ * Validation Reference: https://www.mkyong.com/spring-boot/spring-rest-validation-example/
+ * 						https://www.baeldung.com/spring-response-status-exception
  * Reference: https://www.mkyong.com/spring-boot/spring-rest-spring-security-example/
+ * 
  */
 package com.stephen.controller;
 
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 
 import com.stephen.model.Book;
@@ -57,6 +60,12 @@ public class BookController {
     Book findOne(@PathVariable @Min(1) Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
+// Reference: https://www.baeldung.com/spring-response-status-exception    
+//        try {
+//        	return repository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
+//        } catch (BookNotFoundException ex) {
+//        	throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book ID not found: " + id, ex);
+//        }
     }
 
     // Save or update
