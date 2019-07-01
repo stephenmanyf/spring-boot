@@ -1,8 +1,13 @@
 /**
- * https://www.mkyong.com/spring-boot/spring-rest-validation-example/
+ * Validate Reference: https://www.mkyong.com/spring-boot/spring-rest-validation-example/
+ * Security Reference: https://www.mkyong.com/spring-boot/spring-rest-spring-security-example/
  */
 package com.stephen.controller;
 
+import java.math.BigDecimal;
+import java.util.Optional;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,14 +29,17 @@ import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+//@AutoConfigureMockMvc(secure = false)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class BookControllerTest {
@@ -42,6 +51,44 @@ public class BookControllerTest {
 	
 	@MockBean
 	private BookRepository mockRepository;
+	
+	@Before
+	public void init() {
+		Book book = new Book(1L, "A Guide to the Bodhisattva Way of Life", "Santideva", new BigDecimal("15.41"));
+		when(mockRepository.findById(1L)).thenReturn(Optional.of(book));
+	}
+	
+	//@WithMockUser(username = "USER")
+//	@WithMockUser("USER")
+//	@Test
+//	public void find_login_ok() throws Exception {
+//		mockMvc.perform(get("/books/1"))
+//					.andDo(print())
+//					.andExpect(status().isOk())
+//					.andExpect(jsonPath("$.id", is(1)))
+//					.andExpect(jsonPath("$.name", is("A Guide to the Bodhisattva Way of Life")))
+//					.andExpect(jsonPath("$.author", is("Santideva")))
+//					.andExpect(jsonPath("$.price", is(15.41)));
+//	}
+    @WithMockUser("USER")
+    @Test
+    public void find_login_ok() throws Exception {
+
+        mockMvc.perform(get("/books/1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.name", is("A Guide to the Bodhisattva Way of Life")))
+                .andExpect(jsonPath("$.author", is("Santideva")))
+                .andExpect(jsonPath("$.price", is(15.41)));
+    }
+	
+	@Test
+	public void find_nologin_401() throws Exception {
+		mockMvc.perform(get("/books/1"))
+					.andDo(print())
+					.andExpect(status().isUnauthorized());
+	}
 
 	/*
     {
@@ -51,6 +98,7 @@ public class BookControllerTest {
     }
     */
 	@Test
+	@WithMockUser("ADMIN")
 	public void save_emptyAuthor_emptyPrice_400() throws Exception {
 		String bookInJson = "{\"name\":\"ABC\"}";
 		
@@ -78,6 +126,7 @@ public class BookControllerTest {
     }
     */
 	@Test
+	@WithMockUser("ADMIN")
 	public void save_invalidAuthor_400() throws Exception {
 		String bookInJson = "{\"name\":\" Spring REST tutorials\", \"author\":\"abc\",\"price\":\"9.99\"}";
 		

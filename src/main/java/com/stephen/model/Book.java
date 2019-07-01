@@ -13,6 +13,8 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.context.annotation.Profile;
+
 import com.stephen.validator.Author;
 
 @Entity
@@ -34,6 +36,13 @@ public class Book {
 	private BigDecimal price;
 	
 	public Book(String name, String author, BigDecimal price) {
+		this.name = name;
+		this.author = author;
+		this.price = price;
+	}
+	
+	//for unit test only
+	public Book(Long id, String name, String author, BigDecimal price) {
 		this.name = name;
 		this.author = author;
 		this.price = price;

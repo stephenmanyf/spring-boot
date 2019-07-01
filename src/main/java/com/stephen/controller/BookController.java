@@ -1,6 +1,7 @@
 /**
  * Reference: https://www.mkyong.com/spring-boot/spring-rest-hello-world-example/
  * Reference: https://www.mkyong.com/spring-boot/spring-rest-validation-example/
+ * Reference: https://www.mkyong.com/spring-boot/spring-rest-spring-security-example/
  */
 package com.stephen.controller;
 
@@ -44,6 +45,7 @@ public class BookController {
 
     // Save
     //return 201 instead of 200
+    // test by: curl -v -X POST localhost:8080/books -H "Content-type:application/json" -d "{\"name\":\"AAAABBB\",\"author\":\"stephen\",\"price\":\"9.99\"}" -u admin:password
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/books")
     Book newBook(@Valid @RequestBody Book newBook) {
