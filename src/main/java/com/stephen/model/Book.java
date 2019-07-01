@@ -43,6 +43,7 @@ public class Book {
 	
 	//for unit test only
 	public Book(Long id, String name, String author, BigDecimal price) {
+		this.id = id;
 		this.name = name;
 		this.author = author;
 		this.price = price;

@@ -54,34 +54,28 @@ public class BookControllerTest {
 	
 	@Before
 	public void init() {
+		System.out.println("***********************");
 		Book book = new Book(1L, "A Guide to the Bodhisattva Way of Life", "Santideva", new BigDecimal("15.41"));
 		when(mockRepository.findById(1L)).thenReturn(Optional.of(book));
+		System.out.println("*** mockRepository.count = " + (mockRepository.findById(1L) != null));
+		
+		System.out.println("Init done");
 	}
 	
 	//@WithMockUser(username = "USER")
-//	@WithMockUser("USER")
-//	@Test
-//	public void find_login_ok() throws Exception {
-//		mockMvc.perform(get("/books/1"))
-//					.andDo(print())
-//					.andExpect(status().isOk())
-//					.andExpect(jsonPath("$.id", is(1)))
-//					.andExpect(jsonPath("$.name", is("A Guide to the Bodhisattva Way of Life")))
-//					.andExpect(jsonPath("$.author", is("Santideva")))
-//					.andExpect(jsonPath("$.price", is(15.41)));
-//	}
-    @WithMockUser("USER")
-    @Test
-    public void find_login_ok() throws Exception {
-
-        mockMvc.perform(get("/books/1"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.name", is("A Guide to the Bodhisattva Way of Life")))
-                .andExpect(jsonPath("$.author", is("Santideva")))
-                .andExpect(jsonPath("$.price", is(15.41)));
-    }
+	@WithMockUser(roles={"USER"})
+	@Test
+	public void find_login_ok() throws Exception {
+		System.out.println("***** find_login_ok *****");
+		System.out.println("***** mockRepository.count = " + (mockRepository.findById(1L) != null));
+		mockMvc.perform(get("/books/1"))
+					.andDo(print())
+					.andExpect(status().isOk())
+					.andExpect(jsonPath("$.id", is(1)))
+					.andExpect(jsonPath("$.name", is("A Guide to the Bodhisattva Way of Life")))
+					.andExpect(jsonPath("$.author", is("Santideva")))
+					.andExpect(jsonPath("$.price", is(15.41)));
+	}
 	
 	@Test
 	public void find_nologin_401() throws Exception {
@@ -98,7 +92,7 @@ public class BookControllerTest {
     }
     */
 	@Test
-	@WithMockUser("ADMIN")
+	@WithMockUser(roles={"ADMIN"})
 	public void save_emptyAuthor_emptyPrice_400() throws Exception {
 		String bookInJson = "{\"name\":\"ABC\"}";
 		
@@ -126,8 +120,9 @@ public class BookControllerTest {
     }
     */
 	@Test
-	@WithMockUser("ADMIN")
+	@WithMockUser(roles={"ADMIN"}) //@WithMockUser(username="admin", roles={"ADMIN"}) 
 	public void save_invalidAuthor_400() throws Exception {
+		System.out.println("*** save_invalidAuthor_400 ***");
 		String bookInJson = "{\"name\":\" Spring REST tutorials\", \"author\":\"abc\",\"price\":\"9.99\"}";
 		
 		mockMvc.perform(post("/books")
