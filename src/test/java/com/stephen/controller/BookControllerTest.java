@@ -47,7 +47,7 @@ public class BookControllerTest {
     {
         "timestamp":"2019-03-05T09:34:13.280+0000",
         "status":400,
-        "errors":["Author is not allowed.","Please provide a price","Please provide a author"]
+        "errors":["Author is not allowed.","Please provide a price","Please provide an author"]
     }
     */
 	@Test
